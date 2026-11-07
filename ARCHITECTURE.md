@@ -1,8 +1,8 @@
-# Project Architecture - Ecosystem HPC (C++20 & Raylib)
+# Project Architecture - Ecosystem Simulation (C++20 & Raylib)
 
 ## Project Goal
-Develop a high-performance computing (HPC) evolutionary ecosystem simulation in C++20.
-The objective is to simulate a massive number of entities (10,000+) at 60 FPS using CPU cache-friendly data structures (SoA) and parallel computing principles.
+Develop a 2D ecosystem simulation in C++20 focusing on autonomous agents, artificial life, and emergent behaviors. 
+To observe these complex interactions at scale (10,000+ entities) while maintaining 60 FPS, the project strictly applies Data-Oriented Design (SoA) and cache-friendly memory layouts. Performance is treated as an enabler for scale, not as the final goal.
 
 ---
 
@@ -28,10 +28,10 @@ src/
 
 2. **AgentPool.hpp & FoodPool.hpp**
    - Role: Data structure definitions using Structure of Arrays (SoA).
-   - HPC Constraint: Pre-allocate memory (resize) at startup, zero dynamic allocation during the main loop.
+   - Performance Design: Pre-allocate memory at startup to avoid dynamic allocation during the main simulation loop.
 
 3. **Simulation.hpp / .cpp**
-   - Role: Core physics and logic engine.
+   - Role: Core physics, behavior, and logic engine.
    - Responsibilities:
      - Position updates (x = x + v * dt).
      - Vision and steering force calculations.
@@ -68,7 +68,7 @@ src/
 
 ---
 
-## Applied HPC Principles
-- **Structure of Arrays (SoA):** Optimizing CPU L1/L2/L3 cache lines during sequential memory access.
-- **Squared Distance (dist^2):** Eliminating costly std::sqrt calls during proximity checks.
-- **Simulation/Render Decoupling:** Enabling future headless mode execution for pure performance benchmarking (perf, gprof).
+## Core Technical Principles
+- **Structure of Arrays (SoA):** Maximizing CPU cache efficiency to allow thousands of agents to interact simultaneously without frame drops.
+- **Squared Distance (dist^2):** Eliminating costly `std::sqrt` calls during proximity and vision checks.
+- **Simulation/Render Decoupling:** Ensuring the simulation logic is mathematically isolated and can run entirely independently of the graphical window.
